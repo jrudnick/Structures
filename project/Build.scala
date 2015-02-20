@@ -44,7 +44,7 @@ object StructuresBuild extends Build {
       """
     )
 
-  lazy val root = project.in(file(".")).aggregate(corejvm, laws, discipline, examples, corejs, jsExamples).settings(commonSettings: _*).settings(
+  lazy val root = project.in(file(".")).aggregate(corejvm, laws, discipline, examples, corejs, jsExamples, exercises).settings(commonSettings: _*).settings(
     publishArtifact := false
   )
 
@@ -89,6 +89,18 @@ object StructuresBuild extends Build {
     settings(commonSettings: _*).
     settings(
       name := "structures-examples",
+      addKindProjector
+    )
+
+  lazy val exercises = project.dependsOn(corejvm).
+    settings(commonSettings: _*).
+    settings(
+      name := "structures-exercises",
+      libraryDependencies ++= Seq(
+        "com.github.mpilquist" %% "simulacrum" % "0.2.0" % "optional",
+        "org.scalatest" %% "scalatest" % "2.2.3" % "test"
+      ),
+      addCompilerPlugin("org.scalamacros" % "paradise" % "2.0.1" cross CrossVersion.full),
       addKindProjector
     )
 
